@@ -1,6 +1,5 @@
-/* ACM Class System (I) 2018 Fall Assignment 1 
+/* ACM Class System (I) Fall Assignment 1 
  *
- * Part I: Write an adder in Verilog
  *
  * Implement your naive adder here
  * 
