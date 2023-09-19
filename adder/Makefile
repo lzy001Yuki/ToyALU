@@ -1,12 +1,12 @@
 .PHONY: all
 all:
-	echo 'Now testing: Ripple-Carry Adder'
+	@echo 'Now testing: Ripple-Carry Adder'
 	cat adder-ripple.v > adder.v
 	iverilog test_adder.v
 	./a.out
-	cat '' > adder.v
-	echo 'Now testing: Carry-lookahead Adder'
+	echo '' > adder.v
+	@echo 'Now testing: Carry-lookahead Adder'
 	cat adder-carry.v > adder.v
 	iverilog test_adder.v
 	./a.out
-	cat '' > adder.v
+	echo '' > adder.v
