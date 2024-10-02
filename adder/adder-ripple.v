@@ -14,15 +14,26 @@
  */
 
 module adder(
-	// TODO: Write the ports of this module here
-	//
-	// Hint: 
-	//   The module needs 4 ports, 
-	//     the first 2 ports are 16-bit unsigned numbers as the inputs of the adder
-	//     the third port is a 16-bit unsigned number as the output
-	//	   the forth port is a one bit port as the carry flag
-	// 
+	input [31:0] a,
+	input [31:0] b,
+	output reg [31:0] out
 );
-	// TODO: Implement this module here
+	integer i;
+	reg val[31:0];
+	reg carry[31:0];
+	reg sum[31:0];
+	always @(*) begin
+		for (i = 0; i < 32; i++) {
+			val[i] = a[i] & b[i];
+			carry[i] = a[i] | b[i];
+		}
+		sum[0] = 1'b0;
+		for (i = 0; i < 31; i++) {
+			sum[i+1]=(sum[i] & carry[i]) | val[i];
+		}
+		for (i = 0; i < 32; i++) {
+			out[i] = sum[i] ^ a[i] * b[i];
+		}
+	end
 	
 endmodule
