@@ -35,17 +35,23 @@ always @(*) begin
             mant_b<={1'b0, 1'b1, b[22:0]};
             sign_a<=a[31];
             sign_b<=b[31];
+            if(exp_a == 0 && mant_a[22:0] != 0) begin
+                    mant_a[23] <= 0;
+                end
+            if(exp_b == 0 && mant_b[22:0] != 0) begin
+                    mant_b[23] <= 0;
+                end
             next<= zero;
         end    
         zero:begin
             if(mant_a[22:0]==23'b0 && exp_a == 8'b0) begin
-                sign_s<=b[31];
+                sign_s<=sign_b;
                 exp_s<=exp_b;
                 mant_s<=mant_b;
                 next<=done;
             end
             else if (mant_b[22:0]==23'b0 && exp_b == 8'b0) begin
-                sign_s<=a[31];
+                sign_s<=sign_a;
                 exp_s<=exp_a;
                 mant_s<=mant_a;
                 next<=done;
@@ -60,20 +66,18 @@ always @(*) begin
             end
             else if (exp_a > exp_b) begin
                 diff = exp_a - exp_b;
-                mant_b <= mant_b >> diff;
 
                 // 判断向上或向下舍入
                 out = mant_b & ((1<<diff) - 1);
+                mant_b <= mant_b >> diff;
                 if (out > (1 << (diff - 1))) begin
                     mant_b = mant_b + 1;
-                    $display("here!");
                 end
                 else if (out == (1<<(diff - 1)) && mant_b[0] == 1) begin
                     mant_b = mant_b + 1;
-                    $display("here!");
                 end
 
-                if (mant_b ==25'b0) begin
+                if (mant_b ==0) begin
                     sign_s <= sign_a;
                     mant_s <= mant_a;
                     exp_s <= exp_a;
@@ -86,9 +90,8 @@ always @(*) begin
             end
             else begin
                 diff = exp_b - exp_a;
-                mant_a = mant_a >> diff;
-
                 out = mant_a & ((1<<diff) - 1);
+                mant_a = mant_a >> diff;
 
                 if (out > (1 << (diff - 1))) begin
                     mant_a = mant_a + 1;
@@ -97,7 +100,7 @@ always @(*) begin
                     mant_a = mant_a + 1;
                 end
 
-                if (mant_a == 25'b0) begin
+                if (mant_a == 0) begin
                     sign_s <= sign_b;
                     mant_s <= mant_b;
                     exp_s <= exp_b;
@@ -175,4 +178,3 @@ end
 
 endmodule
                 
-
