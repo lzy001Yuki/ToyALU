@@ -91,7 +91,7 @@ always @(*) begin
             else begin
                 diff = exp_b - exp_a;
                 out = mant_a & ((1<<diff) - 1);
-                mant_a = mant_a >> diff;
+                mant_a <= mant_a >> diff;
 
                 if (out > (1 << (diff - 1))) begin
                     mant_a = mant_a + 1;
